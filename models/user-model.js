@@ -24,6 +24,22 @@ class User {
             address: this.address
         });
     }
+
+    getUserWithEmail() {
+        return db.getDb().collection('users').findOne({ email: this.email });
+    }
+
+    async existAlready() {
+        const existingUser = await this.getUserWithEmail();
+        if (existingUser) {
+            return true;
+        }
+        return false;
+    }
+
+    comparePassword(hashedPw) {
+        return bcryptjs.compare(this.password, hashedPw);
+    }
 }
 
 module.exports = User;
